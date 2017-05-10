@@ -1,0 +1,16 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "tsc",
+    "isShellCommand": true,
+    //"args": ["-p", "."],
+    "args": ["--target", "ES5",//kazes da ts prevede u ES5 js
+            "--outDir", "js",//kazes gdje da pospremi izgenerirani js
+            "--module", "commonjs",//koristis commonjs format,  koji je popularan za razvijanje nodejs aplikacija
+            "--sourceMap",//kazes da se izgenerira source map, veza izmedju ts i js-a
+            "--watch",//kazes da kompajler automatski kompajlira js kad mijenjamo ts
+            "app.ts"],//lista fajlova koje zelis da se kompajliraju
+    "showOutput": "silent",
+    "problemMatcher": "$tsc"
+}
