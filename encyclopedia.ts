@@ -1,14 +1,17 @@
-import {ReferenceItem} from './classes';
+import { ReferenceItem } from './classes';
 
 export default class Encyclopedia extends ReferenceItem {
-    constructor(title: string, year: number, public edition: number){
-        super(title, year);
+    
+    constructor(newTitle: string, newYear: number, public edition: number) {
+        super(newTitle, newYear);
     }
+    
     printItem(): void {
-        super.printItem();//prinatas iz super kalse
-        console.log(`Pritanje iz scublase ${this.edition}, ${this.year}`)
+        super.printItem();
+        console.log(`Edition: ${this.edition} (${this.year})`);
     }
-    printCitation(){
-        //iplementacija abstaktne metode
+    
+    printCitation(): void {
+        console.log(`${this.title} - ${this.year}`);
     }
 }
