@@ -225,5 +225,5 @@ stim da idx nije id od array-a, nego je to ko neki brojač koliko puta se proslo
 
 
 //lodash
-let snakeCaseTitle = _.snakeCase('Teskt za testiranje');
-console.log(snakeCaseTitle);    //teskt_za_testiranje
+// let snakeCaseTitle = _.snakeCase('Teskt za testiranje');
+// console.log(snakeCaseTitle);    //teskt_za_testiranje
