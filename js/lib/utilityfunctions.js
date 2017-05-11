@@ -1,5 +1,6 @@
 "use strict";
-var enums_1 = require('../enums');
+Object.defineProperty(exports, "__esModule", { value: true });
+var enums_1 = require("../enums");
 function CalculateLateFee(daysLate) {
     return daysLate * .25;
 }

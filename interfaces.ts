@@ -10,6 +10,11 @@ interface Book {
     markDamaged?: DamageLogger;
 }
 
+interface Book {//declaration merging, kompajler ce spojiti dvije deklaracije interfejsa Book u jednu
+    publisher: string;
+    hasIndex: boolean;
+}
+
 interface DamageLogger {
     (reason: string): void;
 }

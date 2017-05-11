@@ -1,6 +1,25 @@
 import * as Interfaces from './interfaces';
 
-class UniversityLibrarian implements Interfaces.Librarian {
+class Employee {
+    title: string;
+
+    addToSchedule(): void{
+        console.log('Employee added to schedule.');
+    }
+
+    logTitle(): void{
+        console.log(`Employee has the title ${this.title}`);
+    }
+}
+
+class Researcher {
+    doResearch(topic: string): void {
+        console.log(`Doing research on ${topic}.`);
+    }
+}
+
+//Mixins, Declaration Merging
+class UniversityLibrarian implements Interfaces.Librarian, Employee, Researcher {
     
     name: string;
     email: string;
@@ -9,6 +28,15 @@ class UniversityLibrarian implements Interfaces.Librarian {
     assistCustomer(custName: string) {
         console.log(this.name + ' is assisting ' + custName);
     }
+
+    //klasa moze extendati samo jednu base klasu, ali moze implementirati vise interfejsa od jednom, posto si naveo da zelis implemetirati
+    //klase Employee, Researcher(da to nisu interfejsi, ali kompajler gleda na njih kao da su interfejsi),moras samonavesti metode i propertije
+    //koje vec postoje u tim klasama:
+    //ps. tamo gdje ces koristiti UniversityLibrarian klasu, ces kopirati implementacije iz klasa Employee, Researcher!!!!
+    title: string;
+    addToSchedule: () => void;
+    logTitle: () => void;
+    doResearch: (x: string) => void;
 }
 
 abstract class ReferenceItem {
@@ -36,4 +64,4 @@ abstract class ReferenceItem {
     abstract printCitation(): void;
 }
 
-export { UniversityLibrarian, ReferenceItem };
+export { UniversityLibrarian, ReferenceItem, Employee, Researcher };

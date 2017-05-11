@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Employee = (function () {
     function Employee() {
     }
@@ -6,8 +7,7 @@ var Employee = (function () {
         console.log('Employee added to schedule.');
     };
     Employee.prototype.logTitle = function () {
-        ;
-        console.log("Employee has the title " + this.title + ".");
+        console.log("Employee has the title " + this.title);
     };
     return Employee;
 }());
@@ -21,6 +21,7 @@ var Researcher = (function () {
     return Researcher;
 }());
 exports.Researcher = Researcher;
+//Mixins, Declaration Merging
 var UniversityLibrarian = (function () {
     function UniversityLibrarian() {
     }
@@ -50,8 +51,8 @@ var ReferenceItem = (function () {
         enumerable: true,
         configurable: true
     });
-    ReferenceItem.department = 'Research';
     return ReferenceItem;
 }());
+ReferenceItem.department = 'Research';
 exports.ReferenceItem = ReferenceItem;
 //# sourceMappingURL=classes.js.map
