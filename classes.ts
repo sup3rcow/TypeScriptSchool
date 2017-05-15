@@ -1,4 +1,5 @@
 import * as Interfaces from './interfaces';
+import { sealed, logger } from './decorators';
 
 class Employee {
     title: string;
@@ -18,15 +19,33 @@ class Researcher {
     }
 }
 
+const CLASS_INFO = Symbol();//pises velikim slovim kako bi znao da je to konstanta
+
 //Mixins, Declaration Merging
-class UniversityLibrarian implements Interfaces.Librarian, Employee, Researcher {
+@logger
+@sealed('UniversityLibrarian !!!')
+export class UniversityLibrarian implements Interfaces.Librarian, Employee, Researcher {
     
     name: string;
     email: string;
     department: string;
     
+    //pisanje metoda koriseci symbols, ali ovaj nacin garantira da ce moetoda biti unique ?! 
+    [CLASS_INFO](): void {
+        console.log('This class represents a UniversityLibrarian.');
+    }
+
+    //sa ovim overridas provjeru instanceof
+    static [Symbol.hasInstance](obj: Object) {
+        return obj.hasOwnProperty('name') && obj.hasOwnProperty('assistCustomer');//metoda mora vratiti boolean
+    }
+
     assistCustomer(custName: string) {
         console.log(this.name + ' is assisting ' + custName);
+    }
+
+    assistFaculty() {
+        console.log('Assisting faculty.');
     }
 
     //klasa moze extendati samo jednu base klasu, ali moze implementirati vise interfejsa od jednom, posto si naveo da zelis implemetirati
@@ -38,6 +57,21 @@ class UniversityLibrarian implements Interfaces.Librarian, Employee, Researcher 
     logTitle: () => void;
     doResearch: (x: string) => void;
 }
+@logger
+class PublicLibrarian implements Interfaces.Librarian{
+    name: string;
+    email: string;
+    department: string;
+
+    assistCustomer(custName: string){
+        console.log('Assisting customer.');
+    }
+    teachCommunity(){
+        console.log('Teaching community.');
+    }
+}
+
+
 
 abstract class ReferenceItem {
     
@@ -64,4 +98,4 @@ abstract class ReferenceItem {
     abstract printCitation(): void;
 }
 
-export { UniversityLibrarian, ReferenceItem, Employee, Researcher };
+export { /*UniversityLibrarian,*/ ReferenceItem, Employee, Researcher, PublicLibrarian, CLASS_INFO };

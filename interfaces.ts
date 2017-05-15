@@ -11,8 +11,8 @@ interface Book {
 }
 
 interface Book {//declaration merging, kompajler ce spojiti dvije deklaracije interfejsa Book u jednu
-    publisher: string;
-    hasIndex: boolean;
+    publisher?: string;//dodao si da nebudeo obavezno ..da ti radi stari kod
+    hasIndex?: boolean;//dodao si da nebudeo obavezno ..da ti radi stari kod
 }
 
 interface DamageLogger {

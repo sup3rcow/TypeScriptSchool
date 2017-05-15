@@ -1,8 +1,9 @@
 import { Category } from './enums';
 import { Book, Logger, Author, Librarian, Magazine } from './interfaces';
-import { UniversityLibrarian, ReferenceItem, Employee, Researcher } from './classes';
+import { UniversityLibrarian, ReferenceItem, Employee, Researcher, PublicLibrarian, CLASS_INFO } from './classes';
 import * as util from './lib/utilityFunctions';
-import './LibrarianExtension';//tu ti se nalati deklaration merging UniversityLibrarian klase
+import './LibrarianExtension';//tu ti se nalazi deklaration merging UniversityLibrarian klase
+
 
 function PrintBookInfo(item: Book): void {
     console.log(`${item.title} was authored by ${item.author}`);
@@ -169,10 +170,97 @@ let ebook = new ElectronicBook();
 ebook.Checkin().RemoveFromCustomerDevice().Checkout();
 */
 
+
+/*
 //Declaration merging, napravio si LibrarianExtension.ts, gdje si definirao Declaration Merging za kalsu UniversityLibrarian
-let mergedBook: Book;
+let mergedBook: Book = book1;
 mergedBook.publisher = 'neki publisher';
 
 //primjer extendanja postotjecih modula sa novim clanovima,npr postojeci classes.ts fajl extendas sa novim LibrarianExtension.ts fajlom
+//ako hoces da ti radi ovo, za sad ovo važi:
+//klasu UniversityLibrarian iz classes.ts moraš exportati sa keywordom export, a ne na dnu fajla sa svim ostalim exportima, neznam zasto!!!
 let newLibrarian = new UniversityLibrarian();
-newLibrarian.
+newLibrarian.hostSeminar('learn module augnebtation');
+newLibrarian.name = 'pero';
+newLibrarian.assistCustomer('marko');
+*/
+
+/*
+//typeof type guards
+//tipovi koji se mogu provjeravati su samo: string, number, boolean, symobl
+function logVisitor(param: number | string) {
+    if(typeof param === 'number'){console.log(`${param} new visitors arrived.`)}
+    else {console.log(`${param.toUpperCase()} is our new visitor.`)}
+}
+logVisitor(5);
+logVisitor('Pero');
+
+//instanceof type guards
+//u classes si pripremio 2 kalse koje implementiraju interfejs Librarian
+let lib: Librarian = new PublicLibrarian();
+if (lib instanceof UniversityLibrarian) {
+    lib.assistFaculty();//kompajler prepozna lib kao UniversityLibrarian, hoveraj na lib da se uvjeris
+}
+if (lib instanceof PublicLibrarian) {
+    lib.teachCommunity();//kompajler prepozna lib kao PublicLibrarian, hoveraj na lib da se uvjeris
+}
+
+//custom type guards
+//kosristis kad ne mozes korsititi, typeof ili instanceof
+function isBook(text: Book | Magazine): text is Book {
+    return (<Book>text).author !== undefined;//author properti postoji samo u intefrejsu Book a ne i u Magazine
+}
+class MyMagazine implements Magazine {
+    title: string;
+    publisher: string;
+}
+let readItem: Book | Magazine = new MyMagazine();
+readItem.publisher = 'pero photo copy';
+if(isBook(readItem)){console.log(`it's a book. ${readItem.author}`);} 
+if(!isBook(readItem)){console.log(`it's a magazine. ${readItem.publisher}`);} 
+*/
+
+/*
+//experimenting with Symbols
+//Symbols are new primitive data type
+//symbols are unique and immutable, jednom kad ga kreiras ne moze se mijenjati
+//priprema.. u tsconfig.json si prebacio compilerOptions:target:es5 -> ES2015, valja jer es5 ne podrzava symbols..
+//nesto prica kako browseri prelaze na ES2015 pa ce podrzavati symbols..
+let mySymbol = Symbol('first_symbol');
+let anotherSymbol = Symbol('first_symbol');
+//console.log(mySymbol === anotherSymbol);//false
+//console.log(typeof mySymbol);//symbol
+let myObject = {
+    [mySymbol]: 'value for my symbol key.'
+}
+console.log(myObject[mySymbol]);//value for my symbol key.
+
+let librarian = new UniversityLibrarian();
+librarian[CLASS_INFO]();//ovako pozivas metodu kreiranu sa symbols
+
+let libraryCustomer = {//napravis objekt koji sadrzi dva propertija, a u UniversityLibrarian klasi si sa symbols overridao metodu instanceof
+    name: 'Pero',
+    assistCustomer: (customer: string) => console.log(customer)
+}
+//u launcher.json si morao dodati --harmony-instanceof, jer koristis Symbol.hasInstance
+
+//i sada ce se ispisati da je custom kreirani obajekt instanca od klase librarian LOL
+if(libraryCustomer instanceof UniversityLibrarian) {
+    console.log('it is librarian');
+} else {
+    console.log('not a librarian');
+}
+*/
+
+
+//Decorators --POGLEDAJ OPET COURSE: advaced typesript\decorators
+
+//kako bi ih koristio.. u tsconfig.json si dodao "experimentalDecorators": true
+
+//class decorators
+let lib1 = new UniversityLibrarian();
+
+//class decorators with return constructor
+let lib2 = new PublicLibrarian();
+
+//property decorators

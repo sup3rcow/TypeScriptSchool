@@ -1,58 +1,80 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var Employee = (function () {
-    function Employee() {
-    }
-    Employee.prototype.addToSchedule = function () {
+const decorators_1 = require("./decorators");
+class Employee {
+    addToSchedule() {
         console.log('Employee added to schedule.');
-    };
-    Employee.prototype.logTitle = function () {
-        console.log("Employee has the title " + this.title);
-    };
-    return Employee;
-}());
+    }
+    logTitle() {
+        console.log(`Employee has the title ${this.title}`);
+    }
+}
 exports.Employee = Employee;
-var Researcher = (function () {
-    function Researcher() {
+class Researcher {
+    doResearch(topic) {
+        console.log(`Doing research on ${topic}.`);
     }
-    Researcher.prototype.doResearch = function (topic) {
-        console.log("Doing research on " + topic + ".");
-    };
-    return Researcher;
-}());
+}
 exports.Researcher = Researcher;
+const CLASS_INFO = Symbol(); //pises velikim slovim kako bi znao da je to konstanta
+exports.CLASS_INFO = CLASS_INFO;
 //Mixins, Declaration Merging
-var UniversityLibrarian = (function () {
-    function UniversityLibrarian() {
+let UniversityLibrarian = class UniversityLibrarian {
+    //pisanje metoda koriseci symbols, ali ovaj nacin garantira da ce moetoda biti unique ?! 
+    [CLASS_INFO]() {
+        console.log('This class represents a UniversityLibrarian.');
     }
-    UniversityLibrarian.prototype.assistCustomer = function (custName) {
+    //sa ovim overridas provjeru instanceof
+    static [Symbol.hasInstance](obj) {
+        return obj.hasOwnProperty('name') && obj.hasOwnProperty('assistCustomer'); //metoda mora vratiti boolean
+    }
+    assistCustomer(custName) {
         console.log(this.name + ' is assisting ' + custName);
-    };
-    return UniversityLibrarian;
-}());
+    }
+    assistFaculty() {
+        console.log('Assisting faculty.');
+    }
+};
+UniversityLibrarian = __decorate([
+    decorators_1.logger,
+    decorators_1.sealed('UniversityLibrarian !!!')
+], UniversityLibrarian);
 exports.UniversityLibrarian = UniversityLibrarian;
-var ReferenceItem = (function () {
-    function ReferenceItem(title, year) {
+let PublicLibrarian = class PublicLibrarian {
+    assistCustomer(custName) {
+        console.log('Assisting customer.');
+    }
+    teachCommunity() {
+        console.log('Teaching community.');
+    }
+};
+PublicLibrarian = __decorate([
+    decorators_1.logger
+], PublicLibrarian);
+exports.PublicLibrarian = PublicLibrarian;
+class ReferenceItem {
+    constructor(title, year) {
         this.title = title;
         this.year = year;
         console.log('Creating a new ReferenceItem...');
     }
-    ReferenceItem.prototype.printItem = function () {
-        console.log(this.title + " was published in " + this.year + ".");
-        console.log("Department: " + ReferenceItem.department);
-    };
-    Object.defineProperty(ReferenceItem.prototype, "publisher", {
-        get: function () {
-            return this._publisher.toUpperCase();
-        },
-        set: function (newPublisher) {
-            this._publisher = newPublisher;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return ReferenceItem;
-}());
+    printItem() {
+        console.log(`${this.title} was published in ${this.year}.`);
+        console.log(`Department: ${ReferenceItem.department}`);
+    }
+    get publisher() {
+        return this._publisher.toUpperCase();
+    }
+    set publisher(newPublisher) {
+        this._publisher = newPublisher;
+    }
+}
 ReferenceItem.department = 'Research';
 exports.ReferenceItem = ReferenceItem;
 //# sourceMappingURL=classes.js.map
