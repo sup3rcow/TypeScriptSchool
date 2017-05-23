@@ -2,21 +2,21 @@ import { Category } from './enums';
 import { Book, Logger, Author, Librarian, Magazine } from './interfaces';
 import { UniversityLibrarian, ReferenceItem, Employee, Researcher, PublicLibrarian, CLASS_INFO } from './classes';
 import * as util from './lib/utilityFunctions';
-import './LibrarianExtension';//tu ti se nalazi deklaration merging UniversityLibrarian klase
+import './LibrarianExtension';// tu ti se nalazi deklaration merging UniversityLibrarian klase
 
 
 function PrintBookInfo(item: Book): void {
     console.log(`${item.title} was authored by ${item.author}`);
 }
 function LogFavoriteBooks([book1, book2, ...others]: Book[]){
-    PrintBookInfo(book1);//1.knjiga
-    PrintBookInfo(book2);//2.knjiga
-    others.forEach(book => PrintBookInfo(book));//ostale knjige
+    PrintBookInfo(book1); // 1.knjiga
+    PrintBookInfo(book2); // 2.knjiga
+    others.forEach((book) => PrintBookInfo(book));// ostale knjige
 }
 
-//DESTRUCT
-//destruct ARRAY
-//prvi nacin
+// DESTRUCT
+// destruct ARRAY
+// prvi nacin
 let [book1, book2] = util.GetAllBooks();
 /*
 PrintBookInfo(book1);
@@ -143,7 +143,7 @@ class LibraryBook {
         if (this instanceof ElectronicBook) {
             console.log('Checking in a ElectronicBook.');
         }
-        return this;      
+        return this;
     }
 }
 
@@ -252,7 +252,7 @@ if(libraryCustomer instanceof UniversityLibrarian) {
 }
 */
 
-
+/*
 //Decorators --POGLEDAJ OPET COURSE: advaced typesript\decorators
 
 //kako bi ih koristio.. u tsconfig.json si dodao "experimentalDecorators": true
@@ -263,4 +263,113 @@ let lib1 = new UniversityLibrarian();
 //class decorators with return constructor
 let lib2 = new PublicLibrarian();
 
-//property decorators
+//property decorators, lib1 i lib2..
+try {
+    lib1.assistFaculty = () => console .log('Replace method for property assistFaculty');
+    lib2.teachCommunity = () => {console .log('Replace method for property teachCommunity');}
+} catch (error) {
+    console.log(error.message);
+}
+lib1.assistFaculty();//replaced method
+lib2.teachCommunity();//original method
+*/
+
+// Async patterns
+//
+/*
+//Callback functions
+interface LibMgrCallback {//ovaj interfejs si napravio da krace moze definirati callback
+    (err: Error, tites: string[]): void;
+}
+//function getBooksByCategory(cat: Category, callback: (err: Error, tites: string[]) => void): void {
+  function getBooksByCategory(cat: Category, callback: LibMgrCallback): void {
+
+    setTimeout(() =>{
+        try {
+            let foundBooks: string[] = util.GetBookTitlesByCategory(cat);
+
+            if(foundBooks.length > 0) {
+                callback(null, foundBooks);//zasto mogu staviti null, ako err nije optional?
+            }
+            else {
+                throw new Error('No books found for category ' + Category[cat]);
+            }
+        } catch (error) {
+            callback(error, null);//zasto mogu staviti null, ako titles nije optional?
+        }
+    }, 2000);//izvrsit ce se nakon 2 sekunde
+}
+
+function logCategorySearch(err: Error, title: string[]): void {
+    if (err) {
+        console.log(`Error message: ${err.message}`);
+    }
+    else console.log(title);
+}
+console.log('Begining search');
+getBooksByCategory(Category.Biography, logCategorySearch);//saljes kategoriju i callback funcion
+console.log('Waiting for results..');//nakon ovog ce se ispisati rezultat callback-a, dokaz da ce se izvrsiti asinkrono
+*/
+
+/*
+//promise, pretstavlja objekt koji moze postojati sada, nekad ili nikada
+function getBooksByCategory(cat: Category): Promise<string[]> {
+    let p: Promise<string[]> = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let foundBooks: string[] = util.GetBookTitlesByCategory(cat);
+            if (foundBooks.length > 0) {
+                resolve(foundBooks);
+            } else {
+                reject(`No books found for ${Category[cat]} category.`);
+            }
+        }, 2000);
+    })
+    return p;
+}
+
+console.log('Begining search');
+getBooksByCategory(Category.Biography)
+    .then((titles) => {
+        console.log(titles);
+        return titles.length;
+    }, reason => {return 'nema knjiga --overridas reason, i zbog toga se catch nece dogoditi ako resolve nije vratio nista';})
+                                    //ako promise vrati resolve, imat ces string[], 
+                                    //i onda njega ispises.., i onda vratis number pa mozes opet then..
+    .then(numOfBooks => {
+        console.log('Num of books: ' + numOfBooks);
+        if(typeof(numOfBooks) !== 'number') {
+            throw 'ulazni paramatar treba biti number --sad ce ovo biti reason koji ce catch uhvatiti';
+        }
+    })
+    .catch(reason => console.log(`Error delivered by promise: ${reason}`));//reason dobijemo iz reject-a od promisa, 
+                                                                    //ako nam promise ne vrati resolve
+console.log('Waiting for results..');//nakon ovog ce se ispisati rezultat promise-a, dokaz da ce se izvrsiti asinkrono
+*/
+
+/*
+//async and await
+function getBooksByCategory(cat: Category): Promise<string[]> {
+    let p: Promise<string[]> = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let foundBooks: string[] = util.GetBookTitlesByCategory(cat);
+            if (foundBooks.length > 0) {
+                resolve(foundBooks);
+            } else {
+                reject(`No books found for ${Category[cat]} category.`);
+            }
+        }, 2000);
+    })
+    return p;
+}
+
+async function logSearchResult(bookCategory: Category) {//async funkcija uvijek vraca promise<>, ako nemas return tada vraca Promise<void>
+    let foundBooks = await getBooksByCategory(bookCategory);//posto funkcija vraca promise, mozes je await-ati
+    console.log(foundBooks);
+}
+
+console.log('Begining search');
+logSearchResult(Category.Biography)
+    .catch(reason => console.log(reason));//isto kao kod promisa, mozes than i catch..
+console.log('Waiting for results..');//nakon ovog ce se ispisati rezultat async funkcije, dokaz da ce se izvrsiti asinkrono
+*/
+

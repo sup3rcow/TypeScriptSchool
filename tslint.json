@@ -1,0 +1,18 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {//true znaci da je pravilo enable-ano, dok su njegove postavke u json arrayu
+        "indent": [
+            true,
+            "tabs"//ocekuje da indentation bude napravljen koristeci tab
+        ],
+        "quotemark": [
+            true,
+            "single"//koristis jednostruke navodnike
+        ]
+    },
+    "rulesDirectory": []
+}

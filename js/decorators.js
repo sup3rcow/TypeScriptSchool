@@ -21,4 +21,17 @@ function logger(target) {
     return newConstructor;
 }
 exports.logger = logger;
+function readonly(target, propertyKey, descriptor) {
+    console.log(`Setting ${propertyKey} to be read-only.`);
+    descriptor.writable = false;
+}
+exports.readonly = readonly;
+//slicno kao readonly
+function writable(isWritable) {
+    return function readonly(target, propertyKey, descriptor) {
+        console.log(`Setting ${propertyKey} to writable=${isWritable}`);
+        descriptor.writable = isWritable;
+    };
+}
+exports.writable = writable;
 //# sourceMappingURL=decorators.js.map

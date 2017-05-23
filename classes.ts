@@ -1,5 +1,5 @@
 import * as Interfaces from './interfaces';
-import { sealed, logger } from './decorators';
+import { sealed, logger, readonly, writable } from './decorators';
 
 class Employee {
     title: string;
@@ -40,10 +40,12 @@ export class UniversityLibrarian implements Interfaces.Librarian, Employee, Rese
         return obj.hasOwnProperty('name') && obj.hasOwnProperty('assistCustomer');//metoda mora vratiti boolean
     }
 
+    //@readonly//svi potrebni parametri za ovaj dekorator se automatski prododaju
     assistCustomer(custName: string) {
         console.log(this.name + ' is assisting ' + custName);
     }
 
+    @writable(true)
     assistFaculty() {
         console.log('Assisting faculty.');
     }
@@ -66,6 +68,7 @@ class PublicLibrarian implements Interfaces.Librarian{
     assistCustomer(custName: string){
         console.log('Assisting customer.');
     }
+    @writable(false)
     teachCommunity(){
         console.log('Teaching community.');
     }

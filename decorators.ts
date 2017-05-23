@@ -23,4 +23,21 @@ function logger<TFunction extends Function>(target: TFunction): TFunction {
     return <TFunction>newConstructor;
 }
 
-export {sealed , logger};
+function readonly(target: Object,
+                propertyKey: string,
+                descriptor: PropertyDescriptor){
+                    console.log(`Setting ${propertyKey} to be read-only.`);
+                    descriptor.writable = false;
+                }
+
+//slicno kao readonly
+function writable(isWritable: boolean) {
+    return function readonly(target: Object,
+                 propertyKey: string,
+                 descriptor: PropertyDescriptor){
+                     console.log(`Setting ${propertyKey} to writable=${isWritable}`);
+                      descriptor.writable = isWritable;
+                  } 
+}
+
+export {sealed , logger, readonly, writable};

@@ -34,6 +34,7 @@ let UniversityLibrarian = class UniversityLibrarian {
     static [Symbol.hasInstance](obj) {
         return obj.hasOwnProperty('name') && obj.hasOwnProperty('assistCustomer'); //metoda mora vratiti boolean
     }
+    //@readonly//svi potrebni parametri za ovaj dekorator se automatski prododaju
     assistCustomer(custName) {
         console.log(this.name + ' is assisting ' + custName);
     }
@@ -41,6 +42,9 @@ let UniversityLibrarian = class UniversityLibrarian {
         console.log('Assisting faculty.');
     }
 };
+__decorate([
+    decorators_1.writable(true)
+], UniversityLibrarian.prototype, "assistFaculty", null);
 UniversityLibrarian = __decorate([
     decorators_1.logger,
     decorators_1.sealed('UniversityLibrarian !!!')
@@ -54,6 +58,9 @@ let PublicLibrarian = class PublicLibrarian {
         console.log('Teaching community.');
     }
 };
+__decorate([
+    decorators_1.writable(false)
+], PublicLibrarian.prototype, "teachCommunity", null);
 PublicLibrarian = __decorate([
     decorators_1.logger
 ], PublicLibrarian);
